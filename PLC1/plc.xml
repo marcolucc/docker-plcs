@@ -1,0 +1,20 @@
+<honeydconfig>
+  <config>
+    <interface network="10.0.0.0/24">
+      <bind address="10.0.0.1" port="502"/>
+    </interface>
+    <template name="plc">
+      <bind port="502"/><!-- Modbus TCP port -->
+      <protocol>
+        <modbus lib="modbus" unit="1"/>
+      </protocol>
+      <os>
+        <identify header="\x00\x01\x00\x00\x00\x06\x01\x03">
+          <os class="Linux"/>
+        </identify>
+      </os>
+    </template>
+
+    <node profile="plc" address="10.0.0.2"/>
+  </config>
+</honeydconfig>
