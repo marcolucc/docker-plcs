@@ -28,7 +28,11 @@ RUN make install
 
 # Copy the script to the image
 COPY signatures.sh /app/signatures.sh
+WORKDIR /app
+ADD honeyd.conf /app/honeyd.conf
 
+# Set the script as the command to run when the container starts
+RUN ./signatures.sh
 
 WORKDIR /home/
 
@@ -48,6 +52,10 @@ COPY PLC2.st /home/OpenPLC_v3/scripts
 EXPOSE 502
 EXPOSE 6668/udp
 EXPOSE 8080
+# Ports
+EXPOSE 47
+EXPOSE 67
+EXPOSE 68
 
-#CMD ["/home/OpenPLC_v3/run.sh"]
+CMD ["/home/OpenPLC_v3/run.sh"]
 
