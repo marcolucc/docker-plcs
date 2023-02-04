@@ -47,7 +47,7 @@ RUN mkdir /home/OpenPLC_v3/scripts
 COPY run.sh /home/OpenPLC_v3/
 RUN sudo chmod +x run.sh
 COPY PLC2.st /home/OpenPLC_v3/scripts
-
+COPY launch.sh /home/OpenPLC_v3/launch.sh
 
 EXPOSE 502
 EXPOSE 6668/udp
@@ -57,5 +57,7 @@ EXPOSE 47
 EXPOSE 67
 EXPOSE 68
 
-CMD ["/home/OpenPLC_v3/run.sh"]
-
+CMD nohup honeyd -d -f /app/honeyd.conf &> honeyd.log; sh /home/OpenPLC_v3/run.sh
+#CMD sh /home/OpenPLC_v3/launch.sh
+#WORKDIR /app
+#CMD ["honeyd", "-d", "-f", "honeyd.conf"]
