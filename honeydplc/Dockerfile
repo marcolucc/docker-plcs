@@ -52,7 +52,8 @@ ADD honeyd.conf /app/honeyd.conf
 RUN ./signatures.sh
 
 # Ports
-EXPOSE 445
+EXPOSE 47
+EXPOSE 67
 
 
 #CMD ["honeyd", "-d", "-f", "honeyd.conf"]
