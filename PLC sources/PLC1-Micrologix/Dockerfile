@@ -32,7 +32,7 @@ WORKDIR /app
 ADD honeyd.conf /app/honeyd.conf
 
 # Set the script as the command to run when the container starts
-RUN ./signatures.sh
+RUN chmod +x signatures.sh && ./signatures.sh
 
 WORKDIR /home/
 
