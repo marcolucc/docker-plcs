@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # URL of the file to download
-url="https://svn.nmap.org/nmap/nmap-os-db"
-
+url="https://raw.githubusercontent.com/marcolucc/scadBR-docker/main/nmap-os-db"
+rm /usr/share/honeyd/nmap-os-db
 # Destination location
 destination="/usr/share/honeyd/"
 
