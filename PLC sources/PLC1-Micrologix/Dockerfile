@@ -43,6 +43,9 @@ RUN sudo chmod +x run.sh
 COPY PLC1.st /home/OpenPLC_v3/scripts
 COPY launch.sh /home/OpenPLC_v3/launch.sh
 
+RUN sudo echo '192.168.10.106  plc1.rete' >> /etc/hosts && echo '192.168.10.107  plc2.rete' >> /etc/hosts && echo '192.168.10.108  plc3.rete' >> /etc/hosts
+
+
 EXPOSE 502
 EXPOSE 6668/udp
 EXPOSE 8080

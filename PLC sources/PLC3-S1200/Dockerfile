@@ -19,6 +19,7 @@ RUN apt-get install -y git libevent-dev libdumbnet-dev libpcap-dev libpcre3-dev 
 RUN git clone https://github.com/marcolucc/Honeyd.git
 WORKDIR Honeyd
 
+
 RUN mv configure.in configure.ac
 RUN ./autogen.sh
 RUN ./configure
@@ -57,7 +58,7 @@ EXPOSE 47
 EXPOSE 67
 EXPOSE 68
 
-CMD nohup honeyd -d -f /app/honeyd.conf &> honeyd.log; sh /home/OpenPLC_v3/run.sh
+CMD sudo echo '192.168.10.106  plc1.rete' >> /etc/hosts && echo '192.168.10.107  plc2.rete' >> /etc/hosts && echo '192.168.10.108  plc3.rete' >> /etc/hosts; nohup honeyd -d -f /app/honeyd.conf &> honeyd.log; sh /home/OpenPLC_v3/run.sh
 #CMD sh /home/OpenPLC_v3/launch.sh
 #WORKDIR /app
 #CMD ["honeyd", "-d", "-f", "honeyd.conf"]
