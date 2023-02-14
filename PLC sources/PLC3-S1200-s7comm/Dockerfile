@@ -3,15 +3,22 @@ FROM ubuntu:18.04
 USER root
 WORKDIR /root/
 RUN apt-get update && \
-    apt-get -y install git python-pip autoconf bison build-essential pkg-config bison flex autoconf automake libtool make git python2.7 python-pip sqlite3 cmake sudo wget gcc make openssl libffi-dev libgdbm-dev libsqlite3-dev libssl-dev zlib1g-dev git libevent-dev libdumbnet-dev libpcap-dev libpcre3-dev libedit-dev bison flex libtool automake git zlib1g-dev make
+    apt-get -y install git python-pip autoconf bison build-essential pkg-config bison flex autoconf automake libtool make git python2.7 python-pip sqlite3 cmake sudo
 RUN pip install flask flask-login pyserial pymodbus
 
+# Install dependencies
+RUN apt-get update \
+  && apt-get install -y wget gcc make openssl libffi-dev libgdbm-dev libsqlite3-dev libssl-dev zlib1g-dev \
+  && apt-get clean
 
 
 WORKDIR /home/
 
+RUN apt-get update 
+RUN apt-get install -y git libevent-dev libdumbnet-dev libpcap-dev libpcre3-dev libedit-dev bison flex libtool automake git zlib1g-dev make
 RUN git clone https://github.com/marcolucc/Honeyd.git
 WORKDIR Honeyd
+
 
 RUN mv configure.in configure.ac
 RUN ./autogen.sh
@@ -40,8 +47,12 @@ RUN mkdir /home/OpenPLC_v3/scripts
 
 COPY run.sh /home/OpenPLC_v3/
 RUN sudo chmod +x run.sh
-COPY PLC1.st /home/OpenPLC_v3/scripts
+COPY PLC3.st /home/OpenPLC_v3/scripts
 COPY launch.sh /home/OpenPLC_v3/launch.sh
+COPY libsnap7.so-1200 /usr/lib/libsnap7.so
+
+COPY server /usr/share/honeyd/s7commServer
+RUN chmod +x /usr/share/honeyd/s7commServer && chmod +x /usr/lib/libsnap7.so
 
 
 EXPOSE 502
@@ -51,7 +62,9 @@ EXPOSE 8080
 EXPOSE 47
 EXPOSE 67
 EXPOSE 68
+EXPOSE 102
 
+#CMD bash /usr/share/honeyd/s7commServer
 CMD sudo echo '192.168.10.106  plc1.rete' >> /etc/hosts && echo '192.168.10.107  plc2.rete' >> /etc/hosts && echo '192.168.10.108  plc3.rete' >> /etc/hosts; nohup honeyd -d -f /app/honeyd.conf &> honeyd.log; sh /home/OpenPLC_v3/run.sh
 #CMD sh /home/OpenPLC_v3/launch.sh
 #WORKDIR /app

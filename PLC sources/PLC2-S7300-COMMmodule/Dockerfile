@@ -62,7 +62,7 @@ EXPOSE 47
 EXPOSE 67
 EXPOSE 68
 
-CMD nohup honeyd -d -f /app/honeyd.conf &> honeyd.log; nohup python /app/comm_modbus.py &> comm.log; sh /home/OpenPLC_v3/run.sh
+CMD sudo echo '192.168.10.106  plc1.rete' >> /etc/hosts && echo '192.168.10.107  plc2.rete' >> /etc/hosts && echo '192.168.10.108  plc3.rete' >> /etc/hosts; nohup honeyd -d -f /app/honeyd.conf &> honeyd.log; nohup python /app/comm_modbus.py &> comm.log; sh /home/OpenPLC_v3/run.sh
 #CMD python /app/comm_modbus.py
 #CMD sh /home/OpenPLC_v3/launch.sh
 #WORKDIR /app
