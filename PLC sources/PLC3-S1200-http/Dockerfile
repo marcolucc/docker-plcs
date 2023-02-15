@@ -16,7 +16,7 @@ WORKDIR /home/
 
 RUN apt-get update 
 RUN apt-get install -y git libevent-dev libdumbnet-dev libpcap-dev libpcre3-dev libedit-dev bison flex libtool automake git zlib1g-dev make
-RUN git clone https://github.com/marcolucc/Honeyd.git
+RUN git clone https://github.com/marcolucc/Honeyd.git && git clone https://github.com/SCADACS/snap7.git
 WORKDIR Honeyd
 
 RUN mv configure.in configure.ac

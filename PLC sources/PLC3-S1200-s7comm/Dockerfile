@@ -3,7 +3,7 @@ FROM ubuntu:18.04
 USER root
 WORKDIR /root/
 RUN apt-get update && \
-    apt-get -y install git python-pip autoconf bison build-essential pkg-config bison flex autoconf automake libtool make git python2.7 python-pip sqlite3 cmake sudo
+    apt-get -y install cmake libpthread-stubs0-dev git python-pip autoconf bison build-essential pkg-config bison flex autoconf automake libtool make git python2.7 python-pip sqlite3 cmake sudo
 RUN pip install flask flask-login pyserial pymodbus
 
 # Install dependencies
@@ -16,7 +16,7 @@ WORKDIR /home/
 
 RUN apt-get update 
 RUN apt-get install -y git libevent-dev libdumbnet-dev libpcap-dev libpcre3-dev libedit-dev bison flex libtool automake git zlib1g-dev make
-RUN git clone https://github.com/marcolucc/Honeyd.git
+RUN git clone https://github.com/marcolucc/Honeyd.git && git clone https://github.com/SCADACS/snap7.git
 WORKDIR Honeyd
 
 
@@ -34,6 +34,11 @@ ADD honeyd.conf /app/honeyd.conf
 
 # Set the script as the command to run when the container starts
 RUN chmod +x signatures.sh && ./signatures.sh
+WORKDIR /home/snap7/build/unix/
+RUN make -f x86_64_linux.mk install
+
+WORKDIR /home/snap7/examples/cpp/x86_64-linux/
+RUN make 
 
 WORKDIR /home/
 
@@ -46,13 +51,19 @@ RUN sudo ./install.sh linux
 RUN mkdir /home/OpenPLC_v3/scripts
 
 COPY run.sh /home/OpenPLC_v3/
-RUN sudo chmod +x run.sh
+RUN sudo chmod +x run.sh 
 COPY PLC3.st /home/OpenPLC_v3/scripts
 COPY launch.sh /home/OpenPLC_v3/launch.sh
 COPY libsnap7.so-1200 /usr/lib/libsnap7.so
+COPY helper.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/helper.sh
 
-COPY server /usr/share/honeyd/s7commServer
-RUN chmod +x /usr/share/honeyd/s7commServer && chmod +x /usr/lib/libsnap7.so
+RUN chmod +x /home/snap7/examples/cpp/x86_64-linux/server && ln -s /home/snap7/examples/cpp/x86_64-linux/server /usr/local/bin/
+
+
+
+
+
 
 
 EXPOSE 502
@@ -64,8 +75,15 @@ EXPOSE 67
 EXPOSE 68
 EXPOSE 102
 
+CMD server
 #CMD bash /usr/share/honeyd/s7commServer
-CMD sudo echo '192.168.10.106  plc1.rete' >> /etc/hosts && echo '192.168.10.107  plc2.rete' >> /etc/hosts && echo '192.168.10.108  plc3.rete' >> /etc/hosts; nohup honeyd -d -f /app/honeyd.conf &> honeyd.log; sh /home/OpenPLC_v3/run.sh
+#CMD  sudo echo '192.168.10.106  plc1.rete' >> /etc/hosts && echo '192.168.10.107  plc2.rete' >> /etc/hosts && echo '192.168.10.108  plc3.rete' >> /etc/hosts; nohup honeyd -d -f /app/honeyd.conf &> honeyd.log; sh /home/OpenPLC_v3/run.sh && server 
 #CMD sh /home/OpenPLC_v3/launch.sh
 #WORKDIR /app
 #CMD ["honeyd", "-d", "-f", "honeyd.conf"]
+#CMD sudo echo '192.168.10.106  plc1.rete' >> /etc/hosts \
+#    && echo '192.168.10.107  plc2.rete' >> /etc/hosts \
+ #   && echo '192.168.10.108  plc3.rete' >> /etc/hosts \
+  #  && nohup honeyd -d -f /app/honeyd.conf &> honeyd.log \
+   # && sh /usr/local/bin/helper.sh \
+    #&& sh /home/OpenPLC_v3/run.sh 
