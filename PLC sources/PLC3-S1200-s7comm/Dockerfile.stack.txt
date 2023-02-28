@@ -58,7 +58,13 @@ COPY libsnap7.so-1200 /usr/lib/libsnap7.so
 COPY helper.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/helper.sh
 
-#RUN chmod +x /home/snap7/examples/cpp/x86_64-linux/server && ln -s /home/snap7/examples/cpp/x86_64-linux/server /usr/local/bin/
+RUN chmod +x /home/snap7/examples/cpp/x86_64-linux/server && ln -s /home/snap7/examples/cpp/x86_64-linux/server /usr/local/bin/
+
+
+
+
+
+
 
 EXPOSE 502
 EXPOSE 6668/udp
@@ -69,17 +75,7 @@ EXPOSE 67
 EXPOSE 68
 EXPOSE 102
 
-
-CMD sudo echo '192.168.10.106  plc1.rete' >> /etc/hosts \
-    && echo '192.168.10.107  plc2.rete' >> /etc/hosts \
-    && echo '192.168.10.108  plc3.rete' >> /etc/hosts \
-    && nohup honeyd -d -f /app/honeyd.conf &> honeyd.log \
-    && sh /home/OpenPLC_v3/run.sh
-
-#CMD  server  &; sudo echo '192.168.10.106  plc1.rete' >> /etc/hosts && echo '192.168.10.107  plc2.rete' >> /etc/hosts && echo '192.168.10.108  plc3.rete' >> /etc/hosts; nohup honeyd -d -f /app/honeyd.conf &> honeyd.log; sh /home/OpenPLC_v3/run.sh  
-
-#CMD server
-
+CMD server
 #CMD bash /usr/share/honeyd/s7commServer
 #CMD  sudo echo '192.168.10.106  plc1.rete' >> /etc/hosts && echo '192.168.10.107  plc2.rete' >> /etc/hosts && echo '192.168.10.108  plc3.rete' >> /etc/hosts; nohup honeyd -d -f /app/honeyd.conf &> honeyd.log; sh /home/OpenPLC_v3/run.sh && server 
 #CMD sh /home/OpenPLC_v3/launch.sh

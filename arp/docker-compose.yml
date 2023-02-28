@@ -1,0 +1,33 @@
+version: '3'
+services:
+  computer1:
+    image: alpine
+    command: sh -c "apk add iputils && while true; do arping -I eth0 -c 1 172.20.0.3; sleep 1; done"
+    networks:
+      arp_network1:
+        ipv4_address: 172.20.0.2
+  computer2:
+    image: alpine
+    command: sh -c "apk add iputils && while true; do arping -I eth0 -c 1 172.30.0.3; sleep 1; done"
+    networks:
+      arp_network2:
+        ipv4_address: 172.20.0.3
+  computer3:
+    image: alpine
+    command: sh -c "if ! ip link show computer1; then brctl addbr computer1 && brctl addif computer1 eth0 && brctl addif computer1 eth1 && ip link set dev computer1 up; fi && while true; do sleep 1000; done"
+    networks:
+      arp_network1:
+        ipv4_address: 172.20.0.3
+      arp_network2:
+        ipv4_address: 172.30.0.3
+networks:
+  arp_network1:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
+  arp_network2:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.30.0.0/24

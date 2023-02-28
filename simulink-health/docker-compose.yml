@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  matlab:
+    build:  /simulink/.
+    restart: always
+    healthcheck:
+      test: ["CMD", "matlab", "-batch", "exit"]
+      interval: 5m
+      timeout: 1m
+      retries: 3
+    depends_on:
+      - notification
+
+  notification:
+    build: /notify/.
+    command: sh -c "/notify.sh"
