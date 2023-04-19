@@ -1,8 +1,8 @@
-FROM python:2.7-alpine
+FROM ubuntu:latest
 
-RUN apk add --no-cache nmap && \
-    apk add --no-cache git && \
-    git clone https://github.com/meeas/plcscan.git 
+RUN apt update && apt install -y nmap 
+    
     
 
-CMD ["/bin/sh"]
+#keep container running
+CMD tail -f /dev/null
