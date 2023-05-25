@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # replace the token and chat_id with your own
-TOKEN="5869242526:AAFSB_Kd1u5wHq6tY3SdK989bMSj7w73924"
+TOKEN=""
 CHAT_ID="156090378"
 
 # replace the message with your own
