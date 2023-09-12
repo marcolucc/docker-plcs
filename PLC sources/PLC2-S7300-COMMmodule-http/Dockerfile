@@ -35,7 +35,7 @@ ADD comm_modbus.py /app/comm_modbus.py
 ADD nmap-os-db /app/nmap-os-db
 
 # Set the script as the command to run when the container starts
-RUN chmod +x signatures.sh && ./signatures.sh
+#RUN chmod +x signatures.sh && ./signatures.sh
 
 WORKDIR /home/
 
